@@ -9,3 +9,9 @@ V0.2:
 - Fixed some bugs
 - Added reset system for prestiging
 - Game Works!
+
+V0.2.1
+- Added better UI
+- Laid foundation for P2
+- Fixed some bugs
+- Game Works!
