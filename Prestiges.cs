@@ -5,7 +5,7 @@ using static Gen;
 
 class Pre
 {
-    public static double productionP1 = 0;
+    public static double productionP1 = 0, productionP2 = 0;
     public static double multP1 = 1;
     public static double bestP1 = 0;
 
@@ -13,7 +13,7 @@ class Pre
     {
         addedGens();
 
-        double totalGens = Gen.generatorsEight[0].amount + Gen.generatorsEight[1].amount + Gen.generatorsEight[2].amount + Gen.generatorsEight[3].amount + Gen.generatorsEight[4].amount + Gen.generatorsEight[5].amount + Gen.generatorsEight[6].amount;
+        double totalGens = generatorsEight[0].amount + generatorsEight[1].amount + generatorsEight[2].amount + generatorsEight[3].amount + generatorsEight[4].amount + generatorsEight[5].amount + generatorsEight[6].amount;
 
         productionP1 = Pow(pointsP0 * totalGens / 1000.0, 0.16);
     }
@@ -22,15 +22,14 @@ class Pre
     {
         WriteLine("----------------------------------");
 
-        Write("Confirm prestige action [Yes/No]: ");
+        Write("Confirm prestige action, this is irreversible [Yes/No]: ");
+        string toDoOrNotToDoThatIsTheQuestion = ReadLine()!;
 
         WriteLine("----------------------------------");
-        string toDoOrNotToDoThatIsTheQuestion = ReadLine()!;
         if (string.Equals(toDoOrNotToDoThatIsTheQuestion, "yes", StringComparison.OrdinalIgnoreCase) || string.Equals(toDoOrNotToDoThatIsTheQuestion, "y", StringComparison.OrdinalIgnoreCase))
         {
             multP1 += nextP1Gain();
             bestP1 = productionP1;
-            pointsP0 = 0;
             preReset();
         }
         else
@@ -55,9 +54,48 @@ class Pre
         return gain;
     }
 
+    public static void prestigeP2Gain()
+    {
+        addedGens();
+
+        productionP2 = generatorsNineTen[0].mult * generatorsNineTen[0].amount * generatorsNineTen[1].mult * generatorsNineTen[1].amount / 100;
+    }
+
+    public static void prestigeP2Function()
+    {
+        WriteLine("----------------------------------");
+
+        Write("Confirm prestige action, this is more irreversible then the other, but you can buy some cool stuff [Yes/No]: ");
+        string toDoOrNotToDoThatIsTheQuestion = ReadLine()!;
+
+        WriteLine("----------------------------------");
+        if (string.Equals(toDoOrNotToDoThatIsTheQuestion, "yes", StringComparison.OrdinalIgnoreCase) || string.Equals(toDoOrNotToDoThatIsTheQuestion, "y", StringComparison.OrdinalIgnoreCase))
+        {
+            pre2Reset();
+        }
+        else
+        {
+            WriteLine("------------------");
+
+            WriteLine("Prestige cancelled");
+
+            WriteLine("------------------");
+        }
+    }
+
+    public static void pre2Reset()
+    {
+        addedGens();
+        preReset();
+
+        multP1 = 1;
+        productionP1 = 0;
+    }
+
     public static void debug()
     {
         WriteLine($"MultP1 = {multP1}");
         WriteLine($"ProductionP1 = {productionP1}");
+        WriteLine($"ProductionP2 = {productionP2}");
     }
 }

@@ -62,8 +62,6 @@ public class Gen
         startAmount = amount;
         startMult = mult;
         startGenEightCost = genEightCost;
-
-        productionP2 = 1;
     }
     
     public static void recalculateProduction()
@@ -126,7 +124,7 @@ public class Gen
         WriteLine($"{"Generator 7",-15} {fln(generatorsEight[6].mult),-12} {fln(generatorsEight[6].amount),-12} {fln(generatorsEight[6].cost),-15}");
 
         WriteLine();
-        
+
         WriteLine($"{"Generator 8",-15} {fln(generatorsEight[7].mult),-12} {fln(generatorsEight[7].amount),-12} {fln(generatorsEight[7].cost),-15}");
 
         WriteLine();
@@ -252,7 +250,7 @@ public class Gen
                 {
                     pointsP0 -= generatorsEight[7].cost;
                     generatorsEight[7].amount++;
-                    generatorsEight[7].mult *= 1.0005;
+                    generatorsEight[7].mult *= 1.5;
                     generatorsEight[7].cost *= generatorsEight[7].costHike;
                 }
                 else
@@ -266,7 +264,7 @@ public class Gen
                     generatorsEight[7].amount -= generatorsNineTen[0].genEightCost;
                     generatorsNineTen[0].amount++;
                     generatorsNineTen[0].mult *= 1.05;
-                    generatorsEight[0].cost *= generatorsNineTen[0].genEightCostHike;
+                    generatorsNineTen[0].genEightCost *= generatorsNineTen[0].genEightCostHike;
                 }
                 else
                 {
@@ -279,7 +277,7 @@ public class Gen
                     generatorsEight[7].amount -= generatorsNineTen[1].genEightCost;
                     generatorsNineTen[1].amount++;
                     generatorsNineTen[1].mult *= 1.05;
-                    generatorsEight[1].cost *= generatorsNineTen[1].genEightCostHike;
+                    generatorsNineTen[1].genEightCost *= generatorsNineTen[1].genEightCostHike;
                 }
                 else
                 {
@@ -292,10 +290,18 @@ public class Gen
         }
     }
 
+    public static void produceGenEights()
+    {
+        double anotherMult = generatorsEight[7].amount / 1000000;
+
+        generatorsEight[7].amount += generatorsEight[7].mult * anotherMult;
+    }
+
     public static void preReset()
     {
         addedGens();
 
+        pointsP0 = 0;
         foreach (Gen gen in generatorsEight)
         {
             if (gen != null)

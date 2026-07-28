@@ -8,6 +8,7 @@ using System.Diagnostics;
 using static Gen;
 using static Pre;
 using static FLN;
+using System.Reflection;
 
 class Program
 {
@@ -84,7 +85,16 @@ class Program
             }
             else if (string.Equals(commands, "prestige", StringComparison.OrdinalIgnoreCase))
             {
-                prestigeP1Function();
+                string whichPrestige = ReadLine()!;
+                switch (whichPrestige)
+                {
+                    case "P1":
+                        prestigeP1Function();
+                        break;
+                    case "P2":
+                        prestigeP2Function();
+                        break;
+                }
             }
             else if (string.Equals(commands, "list", StringComparison.OrdinalIgnoreCase))
             {
@@ -114,6 +124,47 @@ class Program
                         break;
                     case "p1()":
                         Pre.debug();
+                        break;
+                    case "pointsp0":
+                        long amt = ToInt64(ReadLine())!;
+                        string op = ReadLine()!;
+                        switch (op)
+                        {
+                            case "set":
+                                pointsP0 = amt;
+                                break;
+                            case "*":
+                                pointsP0 *= amt;
+                                break;
+                            case "+":
+                                pointsP0 += amt;
+                                break;
+                            case "/":
+                                try
+                                {
+                                    pointsP0 /= amt;
+                                    if (pointsP0 <= 0)
+                                    {
+                                        pointsP0 = 0;
+                                    }
+                                }
+                                catch(DivideByZeroException e)
+                                {
+                                    WriteLine("You divided by zero man");
+                                }
+                                break;
+                            case "-":
+                                pointsP0 -= amt;
+                                if (pointsP0 <= 0)
+                                {
+                                    pointsP0 = 0;
+                                }
+                                break;
+                            default:
+                                WriteLine("Nothing to do");
+                                break;
+                        }
+                        
                         break;
                     default:
                         WriteLine("Wrong dbug man");
@@ -160,6 +211,8 @@ class Program
         addedGens();
         production();
         recalculateProduction();
+        produceGenEights();
         prestigeP1Gain();
+        prestigeP2Gain();
     }
 }
