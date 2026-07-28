@@ -1,6 +1,7 @@
 using static System.Console;
 using static System.Convert;
 using static System.Math;
+using static Pre;
 
 public class Gen
 {
@@ -8,6 +9,7 @@ public class Gen
     public static double multGain = 1;
     public static double productionP0;
     public static double pointsP0;
+    public double startAmount, startMult, startCost;
     public static Gen[] generators;
 
     public void Gens(int id, double multGain)
@@ -35,17 +37,21 @@ public class Gen
         this.cost = cost;
         this.costHike = costHike;
 
-        double genMult = 1 + (generators[3].amount + generators[4].amount + generators[5].amount + generators[6].amount) / 2;
+        startAmount = amount;
+        startMult = mult;
+        startCost = cost;
 
-        productionP0 = generators[0].amount * generators[0].mult * multGain * (generators[1].amount + 1) * (generators[2].amount + 1) * genMult;
+        double genMult = 1 + (generators[3].amount + generators[4].amount + generators[5].amount + generators[6].amount) / 10000;
+
+        productionP0 = generators[0].amount * generators[0].mult * multGain * (generators[1].amount + 1) * (generators[2].amount + 1) * genMult * multP1;
     }
     
     public static void recalculateProduction()
     {
         addedGens();
-        double genMult = 1 + (generators[3].amount + generators[4].amount + generators[5].amount + generators[6].amount) / 2;
+        double genMult = 1 + (generators[3].amount + generators[4].amount + generators[5].amount + generators[6].amount) / 10000;
 
-        productionP0 = generators[0].amount * generators[0].mult * multGain * (generators[1].amount + 1) * (generators[2].amount + 1) * genMult;
+        productionP0 = generators[0].amount * generators[0].mult * multGain * (generators[1].amount + 1) * (generators[2].amount + 1) * genMult * multP1;
     }
 
     public static void addedGens()
@@ -61,16 +67,16 @@ public class Gen
             generators[i] = new Gen();
         }
 
-        generators[0].Generator(1, 1.5, 10, 10);
-        generators[1].Generator(0, 1, 100, 10);
-        generators[2].Generator(0, 1, 1000, 10);
-        generators[3].Generator(0, 1, 10000, 100);
-        generators[4].Generator(0, 1, 100000, 100);
-        generators[5].Generator(0, 1, 1000000, 100);
-        generators[6].Generator(0, 1, 10000000, 1000);
-        generators[7].Generator(0, 1, 100000000, 1000);
-        generators[8].Generator(0, 1, 1000000000, 1000);
-        generators[9].Generator(0, 1, 10000000000, 10000);
+        generators[0].Generator(1, 1.5, 10, 10); //gen1
+        generators[1].Generator(0, 1, 100, 10); //gen2
+        generators[2].Generator(0, 1, 1000, 10); //gen3
+        generators[3].Generator(0, 1, 10000, 100); //gen4
+        generators[4].Generator(0, 1, 100000, 100); //gen5
+        generators[5].Generator(0, 1, 1000000, 100); //gen6
+        generators[6].Generator(0, 1, 10000000, 1000); //gen7
+        generators[7].Generator(0, 1, 100000000, 1000); //gen8Temp
+        generators[8].Generator(0, 1, 1000000000, 1000); //gen9Temp
+        generators[9].Generator(0, 1, 10000000000, 10000); //gen10Temp
     }
 
     public static void lister()
@@ -236,6 +242,21 @@ public class Gen
             default:
                 WriteLine("Invalid generator!");
                 break;
+        }
+    }
+
+    public static void preReset()
+    {
+        addedGens();
+
+        foreach (Gen gen in generators)
+        {
+            if (gen != null)
+            {
+                gen.amount = gen.startAmount;
+                gen.mult = gen.startMult;
+                gen.cost = gen.startCost;
+            }
         }
     }
 

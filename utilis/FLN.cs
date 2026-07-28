@@ -7,13 +7,13 @@ public class FLN
             return new LargeNumber(1.0, new LargeNumber(double.MaxValue));
         }
 
-        if (Math.Abs(result) < 1e33)
+        if (Math.Abs(result) < 1e9)
         {
             if (result == Math.Truncate(result))
             {
                 return result.ToString("0");
             }
-            return result.ToString("0.###############################");
+            return result.ToString("0.##");
         }
 
         double exponent = Math.Log10(Math.Abs(result));

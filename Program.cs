@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Net;
 using System.Diagnostics;
+using static Gen;
+using static Pre;
 
 class Program
 {
@@ -56,7 +58,7 @@ class Program
                 try
                 {
                     int genNumber = ToInt32(ReadLine())!;
-                    Gen.buyer(genNumber);
+                    buyer(genNumber);
                 }
                 catch (FormatException e)
                 {
@@ -65,23 +67,35 @@ class Program
             }
             else if (string.Equals(commands, "prestige", StringComparison.OrdinalIgnoreCase))
             {
-                WriteLine("No such system yet! Don't trust the all commands, it can be a lie sometimes!");
+                prestigeP1Function();
             }
             else if (string.Equals(commands, "list", StringComparison.OrdinalIgnoreCase))
             {
-                Gen.lister();
+                lister();
             }
             else if (string.Equals(commands, "points", StringComparison.OrdinalIgnoreCase))
             {
-                WriteLine(FLN.fln(Gen.pointsP0));
+                WriteLine(FLN.fln(pointsP0));
             }
             else if (commands == "prouction")
             {
-                WriteLine(FLN.fln(Gen.productionP0));
+                WriteLine(FLN.fln(productionP0));
             }
             else if (commands == "dbug")
             {
-                Gen.debug();
+                string debugKind = ReadLine()!;
+                switch (debugKind)
+                {
+                    case "debug()":
+                        Gen.debug();
+                        break;
+                    case "p1()":
+                        Pre.debug();
+                        break;
+                    default:
+                        WriteLine("Wrong dbug man");
+                        break;
+                }
             }
             else 
             {
@@ -108,16 +122,17 @@ class Program
     public static void UI()
     {
         SetCursorPosition(0,3);
-        WriteLine(FLN.fln(Gen.pointsP0));
-        Gen.lister();
+        WriteLine(FLN.fln(pointsP0));
+        lister();
         SetCursorPosition(0,20);
         WriteLine("-----------------------------------------------------------------------------------------\n");
     }
 
     public static void tick()
     {
-        Gen.recalculateProduction();
-        Gen.addedGens();
-        Gen.production();
+        addedGens();
+        production();
+        recalculateProduction();
+        prestigeP1Gain();
     }
 }
