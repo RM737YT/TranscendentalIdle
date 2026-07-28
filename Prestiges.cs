@@ -13,14 +13,18 @@ class Pre
     {
         addedGens();
 
-        double totalGens = generators[0].amount + generators[1].amount + generators[2].amount + generators[3].amount + generators[4].amount + generators[5].amount + generators[6].amount;
+        double totalGens = Gen.generatorsEight[0].amount + Gen.generatorsEight[1].amount + Gen.generatorsEight[2].amount + Gen.generatorsEight[3].amount + Gen.generatorsEight[4].amount + Gen.generatorsEight[5].amount + Gen.generatorsEight[6].amount;
 
         productionP1 = Pow(pointsP0 * totalGens / 1000.0, 0.16);
     }
 
     public static void prestigeP1Function()
     {
+        WriteLine("----------------------------------");
+
         Write("Confirm prestige action [Yes/No]: ");
+
+        WriteLine("----------------------------------");
         string toDoOrNotToDoThatIsTheQuestion = ReadLine()!;
         if (string.Equals(toDoOrNotToDoThatIsTheQuestion, "yes", StringComparison.OrdinalIgnoreCase) || string.Equals(toDoOrNotToDoThatIsTheQuestion, "y", StringComparison.OrdinalIgnoreCase))
         {
@@ -31,7 +35,11 @@ class Pre
         }
         else
         {
+            WriteLine("------------------");
+
             WriteLine("Prestige cancelled");
+
+            WriteLine("------------------");
         }
     }
 

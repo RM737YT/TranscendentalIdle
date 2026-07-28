@@ -7,6 +7,7 @@ using System.Net;
 using System.Diagnostics;
 using static Gen;
 using static Pre;
+using static FLN;
 
 class Program
 {
@@ -31,18 +32,30 @@ class Program
 
             if (string.Equals(commands, "all", StringComparison.OrdinalIgnoreCase))
             {
-                WriteLine("BUY: Buys generator >> Usage: BUY then, enter [generator number(1 to 10)] to buy on the next line. \nLIST: Lists all generators and their inflnions >> Usage: LIST \nPOINTS: Returns how many points P0 you have >> Usage: POINTS \nPRESTIGE: Prestiges once it is unlocked >> Usage: PRESTIGE. \nQUIT: Leave the game >> Usage: QUIT.");
+                WriteLine("--------------------------------------------------------------------------------------------------");
+
+                WriteLine("BUY: Buys generator >> Usage: BUY then, enter [generator number(1 to 10)] to buy on the next line. \nLIST: Lists all generators and their informations >> Usage: LIST \nPOINTS: Returns how many points P0 you have >> Usage: POINTS \nPRESTIGE: Prestiges once it is unlocked >> Usage: PRESTIGE. \nQUIT: Leave the game >> Usage: QUIT.");
+
+                WriteLine("--------------------------------------------------------------------------------------------------");
             }
             else if (string.Equals(commands, "quit", StringComparison.OrdinalIgnoreCase))
             {
-                Write("Currently, there is no save system sadly, so quiting will delete the save, do you wish to continue (Y/N)? ");
+                WriteLine("------------------------------------------------------------------------------------------------------------");
+
+                Write("Currently, there is no save system sadly, so quitting will delete the save, do you wish to continue (Y/N)? ");
                 string confirmation = ReadLine()!;
                 confirmation = confirmation.ToUpper();
+
+                WriteLine("------------------------------------------------------------------------------------------------------------");
 
                 if (string.Equals(confirmation, "Y", StringComparison.OrdinalIgnoreCase) || string.Equals(confirmation, "yes", StringComparison.OrdinalIgnoreCase))
                 {
                     keepPlaying = false;
+                    WriteLine("-------------------");
+
                     WriteLine("Thanks for playing!");
+
+                    WriteLine("-------------------");
                     Thread.Sleep(400);
                     Environment.Exit(0);
                     
@@ -54,6 +67,8 @@ class Program
             }
             else if (string.Equals(commands, "buy", StringComparison.OrdinalIgnoreCase))
             {
+                WriteLine("--------------------------------");
+
                 Write("Which generator to be bought?: ");
                 try
                 {
@@ -64,6 +79,8 @@ class Program
                 {
                     WriteLine("ERROR: That is not the correct data type!");
                 }
+
+                WriteLine("--------------------------------");
             }
             else if (string.Equals(commands, "prestige", StringComparison.OrdinalIgnoreCase))
             {
@@ -75,11 +92,17 @@ class Program
             }
             else if (string.Equals(commands, "points", StringComparison.OrdinalIgnoreCase))
             {
-                WriteLine(FLN.fln(pointsP0));
-            }
-            else if (commands == "prouction")
-            {
-                WriteLine(FLN.fln(productionP0));
+                WriteLine("----------------------");
+
+                Write("Points: ");
+                WriteLine(fln(pointsP0));
+
+                WriteLine("----------------------");
+
+                Write("Points per second: ");
+                WriteLine(fln(productionP0));
+
+                WriteLine("----------------------");
             }
             else if (commands == "dbug")
             {
@@ -99,7 +122,11 @@ class Program
             }
             else 
             {
+                WriteLine("---------------------------");
+
                 WriteLine("That is an invalid command!");
+
+                WriteLine("---------------------------");
             }
         }
 
@@ -122,7 +149,7 @@ class Program
     public static void UI()
     {
         SetCursorPosition(0,3);
-        WriteLine(FLN.fln(pointsP0));
+        WriteLine(fln(pointsP0));
         lister();
         SetCursorPosition(0,20);
         WriteLine("-----------------------------------------------------------------------------------------\n");
