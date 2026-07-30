@@ -15,3 +15,9 @@ V0.2.1
 - Laid foundation for P2
 - Fixed some bugs
 - Game Works!
+
+V0.2.2
+- Added "BUYMAX" command
+- Fixed "PRESTIGE" not having any instructions after it
+- Shortened buyer method to just over 20 lines from over 500 lines
+- Game Works!
