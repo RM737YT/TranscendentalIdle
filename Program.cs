@@ -1,21 +1,21 @@
 ﻿using static System.Console;
-using static System.Math;
 using static System.Convert;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Net;
 using System.Diagnostics;
 using static Gen;
 using static Pre;
 using static FLN;
-using System.Reflection;
+using static Upg;
+using static Chall;
 
 class Program
 {
     private static readonly object consoleLock = new object();
+    public static double totalSpentTime = 0, timeThisP2 = 0;
     
     static void Main(string[] args) 
     {
+        Title = "Transcendental Idle";
+
         Thread thisThread = Thread.CurrentThread;
         Thread tickThread = new Thread(tickCaller);
         Thread drawthread = new Thread(UI);
@@ -35,7 +35,7 @@ class Program
             {
                 WriteLine("--------------------------------------------------------------------------------------------------");
 
-                WriteLine("BUY: Buys generator >> Usage: BUY then, enter [generator number(1 to 10)] to buy on the next line. \nLIST: Lists all generators and their informations >> Usage: LIST \nPOINTS: Returns how many points P0 you have >> Usage: POINTS \nPRESTIGE: Prestiges once it is unlocked >> Usage: PRESTIGE. \nQUIT: Leave the game >> Usage: QUIT.");
+                WriteLine("BUY: Buys generator >> Usage: BUY then, enter [generator number(1 to 10)] to buy on the next line \nBUYMAX: Buys all generators to their max in order >> Usage: BUYMAX \nLIST: Lists all generators and their informations >> Usage: LIST \nPOINTS: Returns how many points P0 you have >> Usage: POINTS \nPRESTIGE: Prestiges once it is unlocked >> Usage: PRESTIGE then specify the prestige by P1 or P2 and confirm. \nQUIT: Leave the game >> Usage: QUIT then confirm.");
 
                 WriteLine("--------------------------------------------------------------------------------------------------");
             }
@@ -73,32 +73,63 @@ class Program
                 Write("Which generator to be bought?: ");
                 try
                 {
-                    int genNumber = ToInt32(ReadLine())!;
-                    buyer(genNumber);
+                    int num = ToInt32(ReadLine());
+                    Gen genNum;
+                    if (num >= 1 && num <= 8)
+                    {
+                        genNum = generatorsEight[num - 1];
+                        buyer(genNum);
+                    }
+                    else if (num == 9 || num == 10)
+                    {
+                        genNum = generatorsNineTen[num - 9];
+                        buyer(genNum);
+                    }
+                    else
+                    {
+                        WriteLine("That is an invalid gen number man.");
+                    }
                 }
-                catch (FormatException e)
+                catch (FormatException)
                 {
                     WriteLine("ERROR: That is not the correct data type!");
                 }
 
                 WriteLine("--------------------------------");
             }
+            else if (string.Equals(commands, "buymax", StringComparison.OrdinalIgnoreCase))
+            {
+                buyerMax();
+            }
             else if (string.Equals(commands, "prestige", StringComparison.OrdinalIgnoreCase))
             {
+                WriteLine("--------------------------------------------");
+
+                Write("Which prestige do you want to do [P1/P2]: ");
                 string whichPrestige = ReadLine()!;
-                switch (whichPrestige)
+
+                WriteLine("--------------------------------------------");
+
+                if (string.Equals(whichPrestige, "P1", StringComparison.OrdinalIgnoreCase))
                 {
-                    case "P1":
-                        prestigeP1Function();
-                        break;
-                    case "P2":
-                        prestigeP2Function();
-                        break;
+                    prestigeP1Function();
                 }
+                else if (string.Equals(whichPrestige, "P2", StringComparison.OrdinalIgnoreCase))
+                {
+                    prestigeP2Function();
+                }
+                else
+                {
+                    WriteLine("That is either wrong or that layer doesn't exist yet!");
+                }
+            }
+            else if (string.Equals(commands, "upgrade", StringComparison.OrdinalIgnoreCase))
+            {
+                WriteLine("Not Yet Implemented fully!");
             }
             else if (string.Equals(commands, "list", StringComparison.OrdinalIgnoreCase))
             {
-                lister();
+                Gen.lister();
             }
             else if (string.Equals(commands, "points", StringComparison.OrdinalIgnoreCase))
             {
@@ -126,7 +157,7 @@ class Program
                         Pre.debug();
                         break;
                     case "pointsp0":
-                        long amt = ToInt64(ReadLine())!;
+                        double amt = ToDouble(ReadLine())!;
                         string op = ReadLine()!;
                         switch (op)
                         {
@@ -148,7 +179,7 @@ class Program
                                         pointsP0 = 0;
                                     }
                                 }
-                                catch(DivideByZeroException e)
+                                catch(DivideByZeroException)
                                 {
                                     WriteLine("You divided by zero man");
                                 }
@@ -164,7 +195,24 @@ class Program
                                 WriteLine("Nothing to do");
                                 break;
                         }
-                        
+                        break;
+                    case "proto()":
+                        int num = ToInt32(ReadLine());
+                        Gen genNum;
+                        if (num >= 1 && num <= 8)
+                        {
+                            genNum = generatorsEight[num - 1];
+                            Prototype.buyerForGensFile(genNum);
+                        }
+                        else if (num == 9 || num == 10)
+                        {
+                            genNum = generatorsNineTen[num - 9];
+                            Prototype.buyerForGensFile(genNum);
+                        }
+                        else
+                        {
+                            WriteLine("That is an invalid gen number man.");
+                        }
                         break;
                     default:
                         WriteLine("Wrong dbug man");
@@ -192,6 +240,8 @@ class Program
             if (sw.ElapsedMilliseconds >= 50)
             {
                 tick();
+                totalSpentTime += 50;
+                timeThisP2 += 50;
                 sw.Restart();
             }
         }
@@ -201,9 +251,9 @@ class Program
     {
         SetCursorPosition(0,3);
         WriteLine(fln(pointsP0));
-        lister();
+        Gen.lister();
         SetCursorPosition(0,20);
-        WriteLine("-----------------------------------------------------------------------------------------\n");
+        WriteLine("--------------------------\n");
     }
 
     public static void tick()

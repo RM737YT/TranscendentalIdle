@@ -1,13 +1,16 @@
-using System.Numerics;
 using static System.Console;
 using static System.Math;
 using static Gen;
+using static FLN;
+using static Chall;
+using static Upg;
+using static Program;
 
 class Pre
 {
     public static double productionP1 = 0, productionP2 = 0;
-    public static double multP1 = 1;
-    public static double bestP1 = 0;
+    public static double multP1 = 1, bestP1 = 0;
+    public static double pointsP2 = 0;
 
     public static void prestigeP1Gain()
     {
@@ -71,6 +74,8 @@ class Pre
         WriteLine("----------------------------------");
         if (string.Equals(toDoOrNotToDoThatIsTheQuestion, "yes", StringComparison.OrdinalIgnoreCase) || string.Equals(toDoOrNotToDoThatIsTheQuestion, "y", StringComparison.OrdinalIgnoreCase))
         {
+            pointsP2 += productionP2;
+            Thread.Sleep(100);
             pre2Reset();
         }
         else
@@ -90,12 +95,13 @@ class Pre
 
         multP1 = 1;
         productionP1 = 0;
+        timeThisP2 = 0;
     }
 
     public static void debug()
     {
-        WriteLine($"MultP1 = {multP1}");
-        WriteLine($"ProductionP1 = {productionP1}");
-        WriteLine($"ProductionP2 = {productionP2}");
+        WriteLine($"MultP1 = {fln(multP1)}");
+        WriteLine($"ProductionP1 = {fln(productionP1)}");
+        WriteLine($"ProductionP2 = {fln(productionP2)}");
     }
 }

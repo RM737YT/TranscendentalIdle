@@ -3,14 +3,18 @@ using static System.Convert;
 using static System.Math;
 using static Pre;
 using static FLN;
+using static Chall;
+using static Upg;
+using static Program;
 
 public class Gen
 {
     public double amount, mult, cost, costHike;
     public double genEightCost, genEightCostHike;
     public static double multGain = 1;
-    public static double productionP0, productionP2;
+    public static double productionP0;
     public static double pointsP0;
+    public static double anotherMult;
     public double startAmount, startMult, startCost;
     public double startGenEightCost;
     public static Gen[] generatorsEight = [];
@@ -46,7 +50,6 @@ public class Gen
         startCost = cost;
 
         double genMult = 1 + (generatorsEight[3].amount + generatorsEight[4].amount + generatorsEight[5].amount + generatorsEight[6].amount) / 10000;
-
         productionP0 = generatorsEight[0].amount * generatorsEight[0].mult * multGain * (generatorsEight[1].amount + 1) * (generatorsEight[2].amount + 1) * genMult * multP1;
     }
 
@@ -67,8 +70,8 @@ public class Gen
     public static void recalculateProduction()
     {
         addedGens();
-        double genMult = 1 + (generatorsEight[3].amount + generatorsEight[4].amount + generatorsEight[5].amount + generatorsEight[6].amount) / 10000;
 
+        double genMult = 1 + (generatorsEight[3].amount + generatorsEight[4].amount + generatorsEight[5].amount + generatorsEight[6].amount) / 10000;
         productionP0 = generatorsEight[0].amount * generatorsEight[0].mult * multGain * (generatorsEight[1].amount + 1) * (generatorsEight[2].amount + 1) * genMult * multP1;
     }
 
@@ -148,153 +151,64 @@ public class Gen
         pointsP0 += productionP0;
     }
 
-    public static void buyer(int genNumber)
+    public static bool buyer(Gen genNumber)
     {
         addedGens();
 
-        switch (genNumber)
+        if (pointsP0 < genNumber.cost)
         {
-            case 1:
-                if (pointsP0 >= generatorsEight[0].cost)
-                {
-                    pointsP0 -= generatorsEight[0].cost;
-                    generatorsEight[0].amount++;
-                    generatorsEight[0].mult *= 1.5;
-                    generatorsEight[0].cost *= generatorsEight[0].costHike;
-                }
-                else
-                {
-                    WriteLine("Not enough points!");
-                }
-                break;
-            case 2:
-                if (pointsP0 >= generatorsEight[1].cost)
-                {
-                    pointsP0 -= generatorsEight[1].cost;
-                    generatorsEight[1].amount++;
-                    generatorsEight[1].mult *= 1.05;
-                    generatorsEight[1].cost *= generatorsEight[1].costHike;
-                }
-                else
-                {
-                    WriteLine("Not enough points!");
-                }
-                break;
-            case 3:
-                if (pointsP0 >= generatorsEight[2].cost)
-                {
-                    pointsP0 -= generatorsEight[2].cost;
-                    generatorsEight[2].amount++;
-                    generatorsEight[2].mult *= 1.05;
-                    generatorsEight[2].cost *= generatorsEight[2].costHike;
-                }
-                else
-                {
-                    WriteLine("Not enough points!");
-                }
-                break;
-            case 4:
-                if (pointsP0 >= generatorsEight[3].cost)
-                {
-                    pointsP0 -= generatorsEight[3].cost;
-                    generatorsEight[3].amount++;
-                    generatorsEight[3].mult *= 1.05;
-                    generatorsEight[3].cost *= generatorsEight[3].costHike;
-                }
-                else
-                {
-                    WriteLine("Not enough points!");
-                }
-                break;
-            case 5:
-                if (pointsP0 >= generatorsEight[4].cost)
-                {
-                    pointsP0 -= generatorsEight[4].cost;
-                    generatorsEight[4].amount++;
-                    generatorsEight[4].mult *= 1.005;
-                    generatorsEight[4].cost *= generatorsEight[4].costHike;
-                }
-                else
-                {
-                    WriteLine("Not enough points!");
-                }
-                break;
-            case 6:
-                if (pointsP0 >= generatorsEight[5].cost)
-                {
-                    pointsP0 -= generatorsEight[5].cost;
-                    generatorsEight[5].amount++;
-                    generatorsEight[5].mult *= 1.005;
-                    generatorsEight[5].cost *= generatorsEight[5].costHike;
-                }
-                else
-                {
-                    WriteLine("Not enough points!");
-                }
-                break;
-            case 7:
-                if (pointsP0 >= generatorsEight[6].cost)
-                {
-                    pointsP0 -= generatorsEight[6].cost;
-                    generatorsEight[6].amount++;
-                    generatorsEight[6].mult *= 1.005;
-                    generatorsEight[6].cost *= generatorsEight[6].costHike;
-                }
-                else
-                {
-                    WriteLine("Not enough points!");
-                }
-                break;
-            case 8:
-                if (pointsP0 >= generatorsEight[7].cost)
-                {
-                    pointsP0 -= generatorsEight[7].cost;
-                    generatorsEight[7].amount++;
-                    generatorsEight[7].mult *= 1.5;
-                    generatorsEight[7].cost *= generatorsEight[7].costHike;
-                }
-                else
-                {
-                    WriteLine("Not enough points!");
-                }
-                break;
-            case 9:
-                if (generatorsEight[7].amount >= generatorsNineTen[0].genEightCost)
-                {
-                    generatorsEight[7].amount -= generatorsNineTen[0].genEightCost;
-                    generatorsNineTen[0].amount++;
-                    generatorsNineTen[0].mult *= 1.05;
-                    generatorsNineTen[0].genEightCost *= generatorsNineTen[0].genEightCostHike;
-                }
-                else
-                {
-                    WriteLine("Not enough points!");
-                }
-                break;
-            case 10:
-                if (generatorsEight[7].amount >= generatorsNineTen[1].genEightCost)
-                {
-                    generatorsEight[7].amount -= generatorsNineTen[1].genEightCost;
-                    generatorsNineTen[1].amount++;
-                    generatorsNineTen[1].mult *= 1.05;
-                    generatorsNineTen[1].genEightCost *= generatorsNineTen[1].genEightCostHike;
-                }
-                else
-                {
-                    WriteLine("Not enough points!");
-                }
-                break;
-            default:
-                WriteLine("Invalid generator!");
-                break;
+            WriteLine("Not enough points!");
+            return false;
         }
+
+        if(genNumber == generatorsEight[0] || genNumber == generatorsEight[1] || genNumber == generatorsEight[2] || genNumber == generatorsEight[3] || genNumber == generatorsEight[4] || genNumber == generatorsEight[5] || genNumber == generatorsEight[6] || genNumber == generatorsEight[7]){pointsP0 -= genNumber.cost;}
+        else if(genNumber == generatorsNineTen[0] || genNumber == generatorsNineTen[1]){generatorsEight[7].amount -= genNumber.cost;}
+        genNumber.amount++;
+        genNumber.cost *= genNumber.costHike;
+        if(genNumber == generatorsEight[0] || genNumber == generatorsEight[7]){genNumber.mult *= 1.5;}
+        else if(genNumber == generatorsEight[1] || genNumber == generatorsEight[2] || genNumber == generatorsEight[3]){genNumber.mult *= 1.05;}
+        else if(genNumber == generatorsEight[4] || genNumber == generatorsEight[5] || genNumber == generatorsEight[6] || genNumber == generatorsNineTen[0] || genNumber == generatorsNineTen[1]){genNumber.mult *= 1.005;}
+
+        return true;
     }
 
-    public static void produceGenEights()
+    public static void buyerMax()
     {
-        double anotherMult = generatorsEight[7].amount / 1000000;
+        WriteLine("----------------------------------------");
 
-        generatorsEight[7].amount += generatorsEight[7].mult * anotherMult;
+        WriteLine("Trying to buy all generators in order...");
+
+        for(int i = 0; i < generatorsEight.Length; i++)
+        {
+            while(pointsP0 >= generatorsEight[i].cost)
+            {
+                Gen genNum = generatorsEight[i];
+                buyer(genNum);
+            }
+        }
+
+        for(int i = 0; i < generatorsNineTen.Length; i++)
+        {
+            while(generatorsEight[7].amount >= generatorsNineTen[i].genEightCost)
+            {
+                Gen genNum = generatorsNineTen[i];
+                buyer(genNum);
+                WriteLine($"Gen8 amount: {generatorsEight[7].amount}");
+                WriteLine($"Gen9 cost: {generatorsNineTen[0].genEightCost}");
+                WriteLine($"Gen10 cost: {generatorsNineTen[1].genEightCost}");
+            }
+        }
+
+        WriteLine("All possible generators bought!");
+
+        WriteLine("----------------------------------------");
+    }
+
+    public static double produceGenEights()
+    {
+        anotherMult = generatorsEight[7].amount / 1000000;
+
+        return generatorsEight[7].amount += generatorsEight[7].mult * anotherMult;
     }
 
     public static void preReset()
