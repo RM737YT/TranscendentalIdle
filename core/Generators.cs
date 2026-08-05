@@ -2,25 +2,28 @@ using static System.Console;
 using static System.Convert;
 using static System.Math;
 using static Pre;
-using static FLN;
 using static Chall;
 using static Upg;
 using static Program;
+using System.Formats.Asn1;
+using System.Security.AccessControl;
+using BreakInfinity;
 
 public class Gen
 {
-    public double amount, mult, cost, costHike;
-    public double genEightCost, genEightCostHike;
-    public static double multGain = 1;
-    public static double productionP0;
-    public static double pointsP0;
-    public static double anotherMult;
-    public double startAmount, startMult, startCost;
-    public double startGenEightCost;
+    public BigDouble amount, mult, cost, costHike, bought;
+    public BigDouble gensEightCost, gensEightCostHike;
+    public static BigDouble amountBought = 1;
+    public static BigDouble multGain = 1;
+    public static BigDouble productionP0;
+    public static BigDouble pointsP0;
+    public static BigDouble anotherMult;
+    public BigDouble startAmount, startMult, startCost;
+    public BigDouble startGenEightCost;
     public static Gen[] generatorsEight = [];
     public static Gen[] generatorsNineTen = [];
 
-    public void Gens(int id, double multGain)
+    public void Gens(int id, BigDouble multGain)
     {
         int totalUniqueGens = 0;
         for (int i = 0; i < id; i++)
@@ -36,7 +39,7 @@ public class Gen
         }
     }
 
-    public void Generator(double amount, double mult , double cost, double costHike)
+    public void Generator(BigDouble amount, BigDouble mult , BigDouble cost, BigDouble costHike, BigDouble bought)
     {
         addedGens();
 
@@ -44,35 +47,37 @@ public class Gen
         this.mult = mult;
         this.cost = cost;
         this.costHike = costHike;
+        this.bought = bought;
 
         startAmount = amount;
         startMult = mult;
         startCost = cost;
 
-        double genMult = 1 + (generatorsEight[3].amount + generatorsEight[4].amount + generatorsEight[5].amount + generatorsEight[6].amount) / 10000;
-        productionP0 = generatorsEight[0].amount * generatorsEight[0].mult * multGain * (generatorsEight[1].amount + 1) * (generatorsEight[2].amount + 1) * genMult * multP1;
+        BigDouble gensMult = 1 + (generatorsEight[3].amount + generatorsEight[4].amount + generatorsEight[5].amount + generatorsEight[6].amount) / 10000;
+        productionP0 = generatorsEight[0].amount * generatorsEight[0].mult * multGain * (generatorsEight[1].amount + 1) * (generatorsEight[2].amount + 1) * gensMult * multP1;
     }
 
-    public void GeneratorNineTen(double amount, double mult, double genEightCost, double genEightCostHike)
+    public void GeneratorNineTen(BigDouble amount, BigDouble mult, BigDouble gensEightCost, BigDouble gensEightCostHike, BigDouble bought)
     {
         addedGens();
 
         this.amount = amount;
         this.mult = mult;
-        this.genEightCost = genEightCost;
-        this.genEightCostHike = genEightCostHike;
+        this.gensEightCost = gensEightCost;
+        this.gensEightCostHike = gensEightCostHike;
+        this.bought = bought;
 
         startAmount = amount;
         startMult = mult;
-        startGenEightCost = genEightCost;
+        startGenEightCost = gensEightCost;
     }
     
-    public static void recalculateProduction()
+    public static BigDouble recalculateProduction()
     {
         addedGens();
 
-        double genMult = 1 + (generatorsEight[3].amount + generatorsEight[4].amount + generatorsEight[5].amount + generatorsEight[6].amount) / 10000;
-        productionP0 = generatorsEight[0].amount * generatorsEight[0].mult * multGain * (generatorsEight[1].amount + 1) * (generatorsEight[2].amount + 1) * genMult * multP1;
+        BigDouble gensMult = 1 + (generatorsEight[3].amount + generatorsEight[4].amount + generatorsEight[5].amount + generatorsEight[6].amount) / 10000;
+        return productionP0 = generatorsEight[0].amount * generatorsEight[0].mult * multGain * (generatorsEight[1].amount + 1) * (generatorsEight[2].amount + 1) * gensMult * multP1;
     }
 
     public static void addedGens()
@@ -94,17 +99,22 @@ public class Gen
             generatorsNineTen[i] = new Gen();
         }
 
-        generatorsEight[0].Generator(1, 1.5, 10, 10); //gen1
-        generatorsEight[1].Generator(0, 1, 100, 10); //gen2
-        generatorsEight[2].Generator(0, 1, 1000, 10); //gen3
-        generatorsEight[3].Generator(0, 1, 10000, 100); //gen4
-        generatorsEight[4].Generator(0, 1, 100000, 100); //gen5
-        generatorsEight[5].Generator(0, 1, 1000000, 100); //gen6
-        generatorsEight[6].Generator(0, 1, 10000000, 1000); //gen7
-        generatorsEight[7].Generator(0, 1, 100000000, 1000); //gen8
+        generatorsEight[0].Generator(1, 1.5, 10, 10, 0); //gens1
+        generatorsEight[1].Generator(0, 1, 100, 10, 0); //gens2
+        generatorsEight[2].Generator(0, 1, 1000, 10, 0); //gens3
+        generatorsEight[3].Generator(0, 1, 10000, 100, 0); //gens4
+        generatorsEight[4].Generator(0, 1, 100000, 100, 0); //gens5
+        generatorsEight[5].Generator(0, 1, 1000000, 100, 0); //gens6
+        generatorsEight[6].Generator(0, 1, 10000000, 1000, 0); //gens7
+        generatorsEight[7].Generator(0, 1, 100000000, 1000, 0); //gens8
 
-        generatorsNineTen[0].GeneratorNineTen(0, 1, 10, 10); //gen9
-        generatorsNineTen[1].GeneratorNineTen(0, 1, 100, 100); //gen10
+        generatorsNineTen[0].GeneratorNineTen(0, 1, 10, 10, 0); //gens9
+        generatorsNineTen[1].GeneratorNineTen(0, 1, 100, 100, 0); //gens10
+
+        generatorsNineTen[0].cost = 100;
+        generatorsNineTen[1].cost = 1000;
+        generatorsNineTen[0].costHike = 100;
+        generatorsNineTen[1].costHike = 1000;
     }
 
     public static void lister()
@@ -118,17 +128,17 @@ public class Gen
 
         WriteLine();
 
-        WriteLine($"{"Generator 1",-15} {fln(generatorsEight[0].mult),-12} {fln(generatorsEight[0].amount),-12} {fln(generatorsEight[0].cost),-15}");
-        WriteLine($"{"Generator 2",-15} {fln(generatorsEight[1].mult),-12} {fln(generatorsEight[1].amount),-12} {fln(generatorsEight[1].cost),-15}");
-        WriteLine($"{"Generator 3",-15} {fln(generatorsEight[2].mult),-12} {fln(generatorsEight[2].amount),-12} {fln(generatorsEight[2].cost),-15}");
-        WriteLine($"{"Generator 4",-15} {fln(generatorsEight[3].mult),-12} {fln(generatorsEight[3].amount),-12} {fln(generatorsEight[3].cost),-15}");
-        WriteLine($"{"Generator 5",-15} {fln(generatorsEight[4].mult),-12} {fln(generatorsEight[4].amount),-12} {fln(generatorsEight[4].cost),-15}");
-        WriteLine($"{"Generator 6",-15} {fln(generatorsEight[5].mult),-12} {fln(generatorsEight[5].amount),-12} {fln(generatorsEight[5].cost),-15}");
-        WriteLine($"{"Generator 7",-15} {fln(generatorsEight[6].mult),-12} {fln(generatorsEight[6].amount),-12} {fln(generatorsEight[6].cost),-15}");
+        WriteLine($"{"Generator 1",-15} {generatorsEight[0].mult,-12} {generatorsEight[0].amount,-12} {generatorsEight[0].cost,-15}");
+        WriteLine($"{"Generator 2",-15} {generatorsEight[1].mult,-12} {generatorsEight[1].amount,-12} {generatorsEight[1].cost,-15}");
+        WriteLine($"{"Generator 3",-15} {generatorsEight[2].mult,-12} {generatorsEight[2].amount,-12} {generatorsEight[2].cost,-15}");
+        WriteLine($"{"Generator 4",-15} {generatorsEight[3].mult,-12} {generatorsEight[3].amount,-12} {generatorsEight[3].cost,-15}");
+        WriteLine($"{"Generator 5",-15} {generatorsEight[4].mult,-12} {generatorsEight[4].amount,-12} {generatorsEight[4].cost,-15}");
+        WriteLine($"{"Generator 6",-15} {generatorsEight[5].mult,-12} {generatorsEight[5].amount,-12} {generatorsEight[5].cost,-15}");
+        WriteLine($"{"Generator 7",-15} {generatorsEight[6].mult,-12} {generatorsEight[6].amount,-12} {generatorsEight[6].cost,-15}");
 
         WriteLine();
 
-        WriteLine($"{"Generator 8",-15} {fln(generatorsEight[7].mult),-12} {fln(generatorsEight[7].amount),-12} {fln(generatorsEight[7].cost),-15}");
+        WriteLine($"{"Generator 8",-15} {generatorsEight[7].mult,-12} {generatorsEight[7].amount,-12} {generatorsEight[7].cost,-15}");
 
         WriteLine();
 
@@ -138,77 +148,155 @@ public class Gen
 
         WriteLine();
 
-        WriteLine($"{"Generator 9",-15} {fln(generatorsNineTen[0].mult),-12} {fln(generatorsNineTen[0].amount),-12} {fln(generatorsNineTen[0].genEightCost),-15}");
-        WriteLine($"{"Generator 10",-15} {fln(generatorsNineTen[1].mult),-12} {fln(generatorsNineTen[1].amount),-12} {fln(generatorsNineTen[1].genEightCost),-15}");
+        WriteLine($"{"Generator 9",-15} {generatorsNineTen[0].mult,-12} {generatorsNineTen[0].amount,-12} {generatorsNineTen[0].gensEightCost,-15}");
+        WriteLine($"{"Generator 10",-15} {generatorsNineTen[1].mult,-12} {generatorsNineTen[1].amount,-12} {generatorsNineTen[1].gensEightCost,-15}");
 
         WriteLine("---------------------------------------------------");
     }
     
-    public static void production()
+    public static BigDouble production()
     {
         addedGens();
 
         pointsP0 += productionP0;
+        return pointsP0;
     }
 
-    public static bool buyer(Gen genNumber)
+    public static bool buyer(Gen gensNumber)
     {
         addedGens();
 
-        if (pointsP0 < genNumber.cost)
+        if (pointsP0 < gensNumber.cost)
         {
             WriteLine("Not enough points!");
             return false;
         }
 
-        if(genNumber == generatorsEight[0] || genNumber == generatorsEight[1] || genNumber == generatorsEight[2] || genNumber == generatorsEight[3] || genNumber == generatorsEight[4] || genNumber == generatorsEight[5] || genNumber == generatorsEight[6] || genNumber == generatorsEight[7]){pointsP0 -= genNumber.cost;}
-        else if(genNumber == generatorsNineTen[0] || genNumber == generatorsNineTen[1]){generatorsEight[7].amount -= genNumber.cost;}
-        genNumber.amount++;
-        genNumber.cost *= genNumber.costHike;
-        if(genNumber == generatorsEight[0] || genNumber == generatorsEight[7]){genNumber.mult *= 1.5;}
-        else if(genNumber == generatorsEight[1] || genNumber == generatorsEight[2] || genNumber == generatorsEight[3]){genNumber.mult *= 1.05;}
-        else if(genNumber == generatorsEight[4] || genNumber == generatorsEight[5] || genNumber == generatorsEight[6] || genNumber == generatorsNineTen[0] || genNumber == generatorsNineTen[1]){genNumber.mult *= 1.005;}
+        if(gensNumber == generatorsEight[0] || gensNumber == generatorsEight[1] || gensNumber == generatorsEight[2] || gensNumber == generatorsEight[3] || gensNumber == generatorsEight[4] || gensNumber == generatorsEight[5] || gensNumber == generatorsEight[6] || gensNumber == generatorsEight[7]){pointsP0 -= gensNumber.cost;}
+        else if(gensNumber == generatorsNineTen[0] || gensNumber == generatorsNineTen[1]){generatorsEight[7].amount -= gensNumber.gensEightCost;}
+
+        gensNumber.amount += amountBought;
+        gensNumber.bought += 1;
+
+        if(gensNumber == generatorsEight[0] || gensNumber == generatorsEight[1] || gensNumber == generatorsEight[2] || gensNumber == generatorsEight[3] || gensNumber == generatorsEight[4] || gensNumber == generatorsEight[5] || gensNumber == generatorsEight[6] || gensNumber == generatorsEight[7]){gensNumber.cost *= gensNumber.costHike;}
+        else if(gensNumber == generatorsNineTen[0] || gensNumber == generatorsNineTen[1]){gensNumber.gensEightCost *= gensNumber.gensEightCostHike;}
+
+        if(gensNumber == generatorsEight[0] || gensNumber == generatorsEight[7]){gensNumber.mult *= 1.5;}
+        else if(gensNumber == generatorsEight[1] || gensNumber == generatorsEight[2] || gensNumber == generatorsEight[3]){gensNumber.mult *= 1.05;}
+        else if(gensNumber == generatorsEight[4] || gensNumber == generatorsEight[5] || gensNumber == generatorsEight[6] || gensNumber == generatorsNineTen[0] || gensNumber == generatorsNineTen[1]){gensNumber.mult *= 1.005;}
+
+        return true;
+    }
+
+    public static bool buyerChallSix(Gen gensNumber)
+    {
+        addedGens();
+
+        if(gensNumber == generatorsEight[7])
+        {
+            WriteLine("Generator 8 is currently on a paid leave!");
+            return false;
+        }
+
+        if (pointsP0 < gensNumber.cost)
+        {
+            WriteLine("Not enough points!");
+            return false;
+        }
+
+        if(gensNumber == generatorsEight[0] || gensNumber == generatorsEight[1] || gensNumber == generatorsEight[2] || gensNumber == generatorsEight[3] || gensNumber == generatorsEight[4] || gensNumber == generatorsEight[5] || gensNumber == generatorsEight[6] || gensNumber == generatorsEight[7]){pointsP0 -= gensNumber.cost;}
+        else if(gensNumber == generatorsNineTen[0] || gensNumber == generatorsNineTen[1]){pointsP0 -= gensNumber.cost;}
+
+        if(gensNumber == generatorsEight[7]){gensNumber.amount = 0;}
+        else{gensNumber.amount += amountBought;}
+
+        gensNumber.bought += 1;
+        gensNumber.cost *= gensNumber.costHike;
+        
+        if(gensNumber == generatorsEight[7]){gensNumber.mult = 1;}
+        else if(gensNumber == generatorsEight[0]){gensNumber.mult *= 1.5;}
+        else if(gensNumber == generatorsEight[1] || gensNumber == generatorsEight[2] || gensNumber == generatorsEight[3]){gensNumber.mult *= 1.05;}
+        else if(gensNumber == generatorsEight[4] || gensNumber == generatorsEight[5] || gensNumber == generatorsEight[6] || gensNumber == generatorsNineTen[0] || gensNumber == generatorsNineTen[1]){gensNumber.mult *= 1.005;}
 
         return true;
     }
 
     public static void buyerMax()
     {
-        WriteLine("----------------------------------------");
-
-        WriteLine("Trying to buy all generators in order...");
-
-        for(int i = 0; i < generatorsEight.Length; i++)
+        if(p2Challenges[5].challRunningState == true)
         {
-            while(pointsP0 >= generatorsEight[i].cost)
-            {
-                Gen genNum = generatorsEight[i];
-                buyer(genNum);
-            }
-        }
+            WriteLine("----------------------------------------");
 
-        for(int i = 0; i < generatorsNineTen.Length; i++)
+            WriteLine("Trying to buy all generators in order...");
+
+            for(int i = 0; i < generatorsEight.Length - 1; i++)
+            {
+                while(pointsP0 >= generatorsEight[i].cost)
+                {
+                    Gen gensNum = generatorsEight[i];
+                    buyerChallSix(gensNum);
+                }
+            }
+
+            for(int i = 0; i < generatorsNineTen.Length; i++)
+            {
+                while(generatorsEight[7].amount >= generatorsNineTen[i].gensEightCost)
+                {
+                    Gen gensNum = generatorsNineTen[i];
+                    buyerChallSix(gensNum);
+                }
+            }
+
+            WriteLine("All possible generators bought!");
+
+            WriteLine("----------------------------------------");
+        }
+        else
         {
-            while(generatorsEight[7].amount >= generatorsNineTen[i].genEightCost)
+            WriteLine("----------------------------------------");
+
+            WriteLine("Trying to buy all generators in order...");
+
+            for(int i = 0; i < generatorsEight.Length; i++)
             {
-                Gen genNum = generatorsNineTen[i];
-                buyer(genNum);
-                WriteLine($"Gen8 amount: {generatorsEight[7].amount}");
-                WriteLine($"Gen9 cost: {generatorsNineTen[0].genEightCost}");
-                WriteLine($"Gen10 cost: {generatorsNineTen[1].genEightCost}");
+                while(pointsP0 >= generatorsEight[i].cost)
+                {
+                    Gen gensNum = generatorsEight[i];
+                    buyer(gensNum);
+                }
             }
+
+            for(int i = 0; i < generatorsNineTen.Length; i++)
+            {
+                while(generatorsEight[7].amount >= generatorsNineTen[i].gensEightCost)
+                {
+                    Gen gensNum = generatorsNineTen[i];
+                    buyer(gensNum);
+                }
+            }
+
+            WriteLine("All possible generators bought!");
+
+            WriteLine("----------------------------------------");
         }
-
-        WriteLine("All possible generators bought!");
-
-        WriteLine("----------------------------------------");
     }
 
-    public static double produceGenEights()
+    public static BigDouble produceGenEights()
     {
-        anotherMult = generatorsEight[7].amount / 1000000;
-
+        anotherMult = generatorsEight[7].amount / 1000;
+        
         return generatorsEight[7].amount += generatorsEight[7].mult * anotherMult;
+    }
+
+    public static void produceGenNineTen()
+    {
+        if(p2Challenges[4].challCompletion == true)
+        {
+            foreach(Gen genss in generatorsNineTen)
+            {
+                genss.amount += BigDouble.Pow(BigDouble.Pow(BigDouble.Log10(1 + pointsP0), 0.1), 0.60002);
+            } 
+        }
     }
 
     public static void preReset()
@@ -216,13 +304,25 @@ public class Gen
         addedGens();
 
         pointsP0 = 0;
-        foreach (Gen gen in generatorsEight)
+        foreach (Gen gens in generatorsEight)
         {
-            if (gen != null)
+            if (gens != null)
             {
-                gen.amount = gen.startAmount;
-                gen.mult = gen.startMult;
-                gen.cost = gen.startCost;
+                gens.amount = gens.startAmount;
+                gens.mult = gens.startMult;
+                gens.cost = gens.startCost;
+                gens.bought = 0;
+            }
+        }
+
+        foreach (Gen gens in generatorsNineTen)
+        {
+            if (gens != null)
+            {
+                gens.amount = gens.startAmount;
+                gens.mult = gens.startMult;
+                gens.gensEightCost = gens.startGenEightCost;
+                gens.bought = 0;
             }
         }
     }

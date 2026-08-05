@@ -1,13 +1,14 @@
-V0.1:
-- Game has 10 generators
-- Production works
-- Prestiges to be added later
-- Game Works!
+CHANGELOGS: 
 
-V0.2:
-- Prestige system P1 added
-- Fixed some bugs
-- Added reset system for prestiging
+V0.3
+- 
+- 
+- 
+
+V0.2.2
+- Added "BUYMAX" command
+- Fixed "PRESTIGE" not having any instructions after it
+- Shortened buyer method to just over 20 lines from over 500 lines
 - Game Works!
 
 V0.2.1
@@ -16,8 +17,14 @@ V0.2.1
 - Fixed some bugs
 - Game Works!
 
-V0.2.2
-- Added "BUYMAX" command
-- Fixed "PRESTIGE" not having any instructions after it
-- Shortened buyer method to just over 20 lines from over 500 lines
+V0.2:
+- Prestige system P1 added
+- Fixed some bugs
+- Added reset system for prestiging
+- Game Works!
+
+V0.1:
+- Game has 10 generators
+- Production works
+- Prestiges to be added later
 - Game Works!

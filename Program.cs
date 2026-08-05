@@ -3,18 +3,21 @@ using static System.Convert;
 using System.Diagnostics;
 using static Gen;
 using static Pre;
-using static FLN;
+using BreakInfinity;
 using static Upg;
 using static Chall;
 
 class Program
 {
     private static readonly object consoleLock = new object();
-    public static double totalSpentTime = 0, timeThisP2 = 0;
+    public static BigDouble totalSpentTime = 0, timeThisP2 = 0;
     
     static void Main(string[] args) 
     {
         Title = "Transcendental Idle";
+#pragma warning disable CA1416 // Validate platform compatibility
+        WindowWidth = 125;
+#pragma warning restore CA1416 // Validate platform compatibility
 
         Thread thisThread = Thread.CurrentThread;
         Thread tickThread = new Thread(tickCaller);
@@ -78,12 +81,26 @@ class Program
                     if (num >= 1 && num <= 8)
                     {
                         genNum = generatorsEight[num - 1];
-                        buyer(genNum);
+                        if(p2Challenges[5].challRunningState == true)
+                        {
+                            buyerChallSix(genNum);
+                        }
+                        else
+                        {
+                            buyer(genNum);
+                        }
                     }
                     else if (num == 9 || num == 10)
                     {
                         genNum = generatorsNineTen[num - 9];
-                        buyer(genNum);
+                        if(p2Challenges[5].challRunningState == true)
+                        {
+                            buyerChallSix(genNum);
+                        }
+                        else
+                        {
+                            buyer(genNum);
+                        }
                     }
                     else
                     {
@@ -127,21 +144,53 @@ class Program
             {
                 WriteLine("Not Yet Implemented fully!");
             }
+            else if (string.Equals(commands, "enter challenge", StringComparison.OrdinalIgnoreCase) || string.Equals(commands, "challenge", StringComparison.OrdinalIgnoreCase))
+            {
+                WriteLine("-----------------------------------------------");
+
+                Write("Which tier of challenge to be entered? [P2]: ");
+                string tier = ReadLine()!;
+
+                WriteLine("-----------------------------------------------");
+
+                tier = tier.ToLower();
+
+                WriteLine("-------------------------------------------------------------------------");
+
+                WriteLine("Which challenge of this tier to be entered? [For P2: 1, 2, 3, 4, 5, 6]: ");
+                int id = ToInt32(ReadLine());
+
+                WriteLine("-------------------------------------------------------------------------");
+
+                enterChallenge(tier, id);
+            }
             else if (string.Equals(commands, "list", StringComparison.OrdinalIgnoreCase))
             {
                 Gen.lister();
+
+                WriteLine("----------------------");
+
+                Write("Points: ");
+                WriteLine(pointsP0);
+
+                WriteLine("----------------------");
+
+                Write("Points per second: ");
+                WriteLine(productionP0);
+
+                WriteLine("----------------------");
             }
             else if (string.Equals(commands, "points", StringComparison.OrdinalIgnoreCase))
             {
                 WriteLine("----------------------");
 
                 Write("Points: ");
-                WriteLine(fln(pointsP0));
+                WriteLine(pointsP0);
 
                 WriteLine("----------------------");
 
                 Write("Points per second: ");
-                WriteLine(fln(productionP0));
+                WriteLine(productionP0);
 
                 WriteLine("----------------------");
             }
@@ -214,6 +263,9 @@ class Program
                             WriteLine("That is an invalid gen number man.");
                         }
                         break;
+                    case "challs()":
+                        Chall.debug();
+                        break;
                     default:
                         WriteLine("Wrong dbug man");
                         break;
@@ -250,7 +302,7 @@ class Program
     public static void UI()
     {
         SetCursorPosition(0,3);
-        WriteLine(fln(pointsP0));
+        WriteLine(pointsP0);
         Gen.lister();
         SetCursorPosition(0,20);
         WriteLine("--------------------------\n");
@@ -259,9 +311,11 @@ class Program
     public static void tick()
     {
         addedGens();
+        addedChalls();
         production();
         recalculateProduction();
         produceGenEights();
+        produceGenNineTen();
         prestigeP1Gain();
         prestigeP2Gain();
     }

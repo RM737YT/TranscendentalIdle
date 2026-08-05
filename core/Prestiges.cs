@@ -1,34 +1,33 @@
 using static System.Console;
 using static System.Math;
 using static Gen;
-using static FLN;
 using static Chall;
 using static Upg;
 using static Program;
-
+using BreakInfinity;
 class Pre
 {
-    public static double productionP1 = 0, productionP2 = 0;
-    public static double multP1 = 1, bestP1 = 0;
-    public static double pointsP2 = 0;
+    public static BigDouble productionP1 = 0, productionP2 = 0, productionP2Amount = 1;
+    public static BigDouble multP1 = 1, bestP1 = 0;
+    public static BigDouble pointsP2 = 0, p2Amount = 0;
 
     public static void prestigeP1Gain()
     {
         addedGens();
 
-        double totalGens = generatorsEight[0].amount + generatorsEight[1].amount + generatorsEight[2].amount + generatorsEight[3].amount + generatorsEight[4].amount + generatorsEight[5].amount + generatorsEight[6].amount;
+        BigDouble totalGens = generatorsEight[0].amount + generatorsEight[1].amount + generatorsEight[2].amount + generatorsEight[3].amount + generatorsEight[4].amount + generatorsEight[5].amount + generatorsEight[6].amount;
 
-        productionP1 = Pow(pointsP0 * totalGens / 1000.0, 0.16);
+        productionP1 = BigDouble.Pow(pointsP0 * totalGens / 1000, 0.4);
     }
 
     public static void prestigeP1Function()
     {
-        WriteLine("----------------------------------");
+        WriteLine("-----------------------------------------------------------");
 
         Write("Confirm prestige action, this is irreversible [Yes/No]: ");
         string toDoOrNotToDoThatIsTheQuestion = ReadLine()!;
 
-        WriteLine("----------------------------------");
+        WriteLine("-----------------------------------------------------------");
         if (string.Equals(toDoOrNotToDoThatIsTheQuestion, "yes", StringComparison.OrdinalIgnoreCase) || string.Equals(toDoOrNotToDoThatIsTheQuestion, "y", StringComparison.OrdinalIgnoreCase))
         {
             multP1 += nextP1Gain();
@@ -45,10 +44,10 @@ class Pre
         }
     }
 
-    public static double nextP1Gain()
+    public static BigDouble nextP1Gain()
     {
-        double currentGain = productionP1;
-        double gain = currentGain - bestP1;
+        BigDouble currentGain = productionP1;
+        BigDouble gain = currentGain - bestP1;
         if (gain < 0)
         {
             gain = 0;;
@@ -66,15 +65,16 @@ class Pre
 
     public static void prestigeP2Function()
     {
-        WriteLine("----------------------------------");
+        WriteLine("----------------------------------------------------------------------------------------------------------------");
 
         Write("Confirm prestige action, this is more irreversible then the other, but you can buy some cool stuff [Yes/No]: ");
         string toDoOrNotToDoThatIsTheQuestion = ReadLine()!;
 
-        WriteLine("----------------------------------");
+        WriteLine("-----------------------------------------------------------------------------------------------------------------");
         if (string.Equals(toDoOrNotToDoThatIsTheQuestion, "yes", StringComparison.OrdinalIgnoreCase) || string.Equals(toDoOrNotToDoThatIsTheQuestion, "y", StringComparison.OrdinalIgnoreCase))
         {
             pointsP2 += productionP2;
+            p2Amount += productionP2Amount;
             Thread.Sleep(100);
             pre2Reset();
         }
@@ -91,6 +91,7 @@ class Pre
     public static void pre2Reset()
     {
         addedGens();
+        boughtGensCalculator();
         preReset();
 
         multP1 = 1;
@@ -100,8 +101,8 @@ class Pre
 
     public static void debug()
     {
-        WriteLine($"MultP1 = {fln(multP1)}");
-        WriteLine($"ProductionP1 = {fln(productionP1)}");
-        WriteLine($"ProductionP2 = {fln(productionP2)}");
+        WriteLine($"MultP1 = {multP1}");
+        WriteLine($"ProductionP1 = {productionP1}");
+        WriteLine($"ProductionP2 = {productionP2}");
     }
 }
