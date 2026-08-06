@@ -912,7 +912,7 @@ namespace BreakInfinity
                 var format = places > 0 ? $"G{places}" : "G";
                 if (value.Exponent < 9 && value.Exponent > -9)
                 {
-                    return value.ToDouble().ToString(format , CultureInfo.InvariantCulture);
+                    return value.ToDouble().ToString("0.##" , CultureInfo.InvariantCulture);
                 }
 
                 return value.Mantissa.ToString(format, CultureInfo.InvariantCulture) 

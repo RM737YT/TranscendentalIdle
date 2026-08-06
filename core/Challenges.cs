@@ -54,6 +54,12 @@ class Chall
 
     public static void enterChallenge(string tier, int id)
     {
+        if(p2Amount < 1)
+        {
+            WriteLine("Get one Beyond prestige first to enter these!");
+            return;
+        }
+        
         switch (tier)
         {
             case "p2":
@@ -99,27 +105,27 @@ class Chall
         switch (challInternalID)
         {
             case "p2-1":
-                _ = p2Challenges[0].challModifier;
+                p2Challenges[0].challModifier();
                 exitChallenge("p2-1");
                 break;
             case "p2-2":
-                _ = p2Challenges[1].challModifier;
+                p2Challenges[1].challModifier();
                 exitChallenge("p2-2");
                 break;
             case "p2-3":
-                _ = p2Challenges[2].challModifier;
+                p2Challenges[2].challModifier();
                 exitChallenge("p2-3");
                 break;
             case "p2-4":
-                _ = p2Challenges[3].challModifier;
+                p2Challenges[3].challModifier();
                 exitChallenge("p2-4");
                 break;
             case "p2-5":
-                _ = p2Challenges[4].challModifier;
+                p2Challenges[4].challModifier();
                 exitChallenge("p2-5");
                 break;
             case "p2-6":
-                _ = p2Challenges[5].challModifier;
+                p2Challenges[5].challModifier();
                 exitChallenge("p2-6");
                 break;
             default:
@@ -136,7 +142,7 @@ class Chall
                 if(productionP2 >= 1)
                 {
                     WriteLine("P2-1 has successfully beeen completed! \nP2CU1 has been unlocked!");
-                    _ = p2Challenges[0].challReward;
+                    p2Challenges[0].challReward();
                     p2Challenges[0].challCompletion = true;
                     p2Challenges[0].challRunningState = false;
                     challengesCompleted += 1;
@@ -146,7 +152,7 @@ class Chall
                 if(pointsP0 >= 1e30)
                 {
                     WriteLine("P2-2 has successfully beeen completed! \nP2CU2 has been unlocked!");
-                    _ = p2Challenges[1].challReward;
+                    p2Challenges[1].challReward();
                     p2Challenges[1].challCompletion = true;
                     p2Challenges[1].challRunningState = false;
                     challengesCompleted += 1;
@@ -156,7 +162,7 @@ class Chall
                 if(generatorsEight.All(gens => gens.amount >= 1) && generatorsNineTen.All(gens => gens.amount >= 1))
                 {
                     WriteLine("P2-3 has successfully beeen completed! \nP2CU3 has been unlocked!");
-                    _ = p2Challenges[2].challReward;
+                    p2Challenges[2].challReward();
                     p2Challenges[2].challCompletion = true;
                     p2Challenges[2].challRunningState = false;
                     challengesCompleted += 1;
@@ -166,7 +172,7 @@ class Chall
                 if(multP1 >= 1000000)
                 {
                     WriteLine("P2-4 has successfully beeen completed! \nP2CU4 has been unlocked!");
-                    _ = p2Challenges[3].challReward;
+                    p2Challenges[3].challReward();
                     p2Challenges[3].challCompletion = true;
                     p2Challenges[3].challRunningState = false;
                     challengesCompleted += 1;
@@ -176,7 +182,7 @@ class Chall
                 if(productionP2 >= 20)
                 {
                     WriteLine("P2-5 has successfully beeen completed! \nP2CU5 has been unlocked!");
-                    _ = p2Challenges[4].challReward;
+                    p2Challenges[4].challReward();
                     p2Challenges[4].challCompletion = true;
                     p2Challenges[4].challRunningState = false;
                     challengesCompleted += 1;
@@ -186,7 +192,7 @@ class Chall
                 if(productionP2 >= 1000000)
                 {
                     WriteLine("P2-6 has successfully beeen completed! \nP2CU6 has been unlocked!");
-                    _ = p2Challenges[5].challReward;
+                    p2Challenges[5].challReward();
                     p2Challenges[5].challCompletion = true;
                     p2Challenges[5].challRunningState = false;
                     challengesCompleted += 1;
@@ -207,6 +213,12 @@ class Chall
     public static void lister()
     {
         addedChalls();
+
+        if(p2Amount < 1)
+        {
+            WriteLine("Get one Beyond prestige first to see these!");
+            return;
+        }
 
         WriteLine("---------------------------------------------------------------------------------------------------------------------------");
 

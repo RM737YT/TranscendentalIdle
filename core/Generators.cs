@@ -5,8 +5,6 @@ using static Pre;
 using static Chall;
 using static Upg;
 using static Program;
-using System.Formats.Asn1;
-using System.Security.AccessControl;
 using BreakInfinity;
 
 public class Gen
@@ -121,7 +119,6 @@ public class Gen
     {
         addedGens();
 
-
         WriteLine("---------------------------------------------------");
         WriteLine($"{"Generator",-15} {"Mult",-12} {"Amount",-12} {"Cost",-15}");
         WriteLine("---------------------------------------------------");
@@ -223,6 +220,17 @@ public class Gen
 
     public static void buyerMax()
     {
+        if(multP1 < 1)
+        {
+            WriteLine("Not unlocked yet! \nUnlocks at the first Multiplier prestige!");
+            return;
+        }
+        else if(p2Amount < 1)
+        {
+            WriteLine("Not unlocked yet! \nUnlocks at the first Multiplier prestige!");
+            return;
+        }
+
         if(p2Challenges[5].challRunningState == true)
         {
             WriteLine("----------------------------------------");
@@ -303,6 +311,7 @@ public class Gen
     {
         addedGens();
 
+        productionP0 = 0;
         pointsP0 = 0;
         foreach (Gen gens in generatorsEight)
         {

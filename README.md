@@ -6,7 +6,12 @@ To run the game for now, copy the '.vscode/', 'core/', 'utilis/' and 'Program.cs
 
 # CHANGELOGS
 
-## V0.3 Pre Release
+## V0.3 Pre Release-2
+- Added "UPGRADE" command to actually buy upgrades
+- Fixed some bugs related to challenges and upgrades implementation
+- Game Works!
+
+## V0.3 Pre Release-1
 - Added 6 challenges for beyond prestige layer (P2)
 - Added functionality for entering the challenges, challenges' modification and exiting the challenges
 - Added 6 main upgrades
