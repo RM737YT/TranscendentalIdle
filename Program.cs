@@ -600,27 +600,13 @@ class Program
             produceBeyondPrestige();
         }
 
-        if(totalSpentTime / 1000 >= nextAutoSave)
+        if(totalSpentTime >= nextAutoSave)
         {
-            bool save = saveFunction();
-            if(save == true)
-            {
-                WriteLine("-------------");
-
-                WriteLine("Saved game...");
-                WriteLine("COMMANDS> ");
-
-                WriteLine("-------------");
-            }
-            else
-            {
-                WriteLine("---------------------------------------------------------");
-
-                WriteLine("Game could not be auto saved! Try saving manually please.");
-
-                WriteLine("---------------------------------------------------------");
-            }
-            nextAutoSave += 3000;
+            saveFunction();
+            WriteLine("\nSaved game...");
+            Write("COMMANDS> ");
+            
+            nextAutoSave += 30000;
         }
     }
 }
