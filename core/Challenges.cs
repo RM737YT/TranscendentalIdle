@@ -44,9 +44,9 @@ class Chall
 
         // challPreset.challengesP2("id: name", "desc", "goal", "reward desc", running or not(bool), completed or not(bool)), () => { code for modification }, () => { rewward after completion });
 
-        p2Challenges[0].challengesP2("C1: Timed division", "FASTER THE 10 SECOND WINDOW IS CLOSING (Every 10 seconds, your PointsP0 are divided by 10)", "Reach 1 Beyond points produced as next prestige's production to complete challenge.", "Inputs a dynamic multiplier based on time spent on this prestige to P2U2's multiplier.", false, false, () => { if(timeThisP2/100 == 10){pointsP0 /= 10;} }, () => { p2U2Mult *= BigDouble.Log10(timeThisP2/100); });
+        p2Challenges[0].challengesP2("C1: Timed division", "GO FASTER! THE 10 SECOND WINDOW IS CLOSING (Every 10 seconds, your PointsP0 are divided by 10)", "Reach 1 Beyond points produced as next prestige's production to complete challenge.", "Inputs a dynamic multiplier based on time spent on this prestige to P2U2's multiplier.", false, false, () => { if(timeThisP2 / 1000 == 10){pointsP0 /= 10;} }, () => { p2U2Mult *= BigDouble.Log10(timeThisP2 / 1000); });
         p2Challenges[1].challengesP2("C2: Lag-", "Not good enough specs (Buying generators only works at half efficiency)", "Reach 1e30 points to complete", "Generator multipliers are multiplied by 1.001", false, false, () => { foreach(Gen gens in generatorsEight){gens.mult /= 2;} foreach(Gen gens in generatorsNineTen){gens.mult /= 2;} }, () => { foreach(Gen gens in generatorsEight){gens.mult *= 1.001;} foreach(Gen gens in generatorsNineTen){gens.mult *= 1.001;} });
-        p2Challenges[2].challengesP2("C3: Jamming out", "Your printers are trying to eat you (all generator randomly restart from 0 amount and 1 mult)", "Reach all 10 generators' amount 1+ to complete", "You can now buy 2 generators at once instead of one at the same cost of buying one", false, false, () => { Random random = new Random(); int eight = random.Next(0, 8); BigDouble nextAttack = 120; if(totalSpentTime/100 >= nextAttack){generatorsEight[eight].amount = 0; generatorsEight[eight].mult = 1; nextAttack = 0; nextAttack = totalSpentTime/100 + random.Next(1, 120); } }, () => { amountBought = 2; });
+        p2Challenges[2].challengesP2("C3: Jamming out", "Your printers are trying to eat you (all generator randomly restart from 0 amount and 1 mult)", "Reach all 10 generators' amount 1+ to complete", "You can now buy 2 generators at once instead of one at the same cost of buying one", false, false, () => { Random random = new Random(); int eight = random.Next(0, 8); BigDouble nextAttack = 120; if(totalSpentTime / 1000 >= nextAttack){generatorsEight[eight].amount = 0; generatorsEight[eight].mult = 1; nextAttack = 0; nextAttack = totalSpentTime / 1000 + random.Next(1, 120); } }, () => { amountBought = 2; });
         p2Challenges[3].challengesP2("C4: Explosive", "P1 is in a bad spot right now (P1 production is divided by 1,000,000,000,000)", "Reach 1,000,000 P1 to complete", "P1 production is multiplied by 1,000,000", false, false, () => { productionP1 /= 1000000000000; }, () => { productionP1 *= 1000000; });
         p2Challenges[4].challengesP2("C5: Lazy workers", "Working from home I guess (9th and 10th generators' multipliers are divided by 10)", "Reach 20 Beyond points as next prestige's production to complete", "9th and 10th generator now start off with one bought already wih base cost and it increases based on Points", false, false, () => { foreach(Gen gens in generatorsNineTen){gens.mult /= 10;} }, () => { foreach(Gen gens in generatorsNineTen){gens.startAmount = 1;} });
         p2Challenges[5].challengesP2("C6: Work leave (paid)", "Why Gen8 no work? :( (You can't buy 8th generators)", "Reach 1,000,000 Beyond points as next prestige's production to complete", "9th and 10th generators are boosted", false, false, () => {  }, () => { foreach(Gen gens in generatorsNineTen){gens.mult *= 1.005;} });
@@ -56,7 +56,11 @@ class Chall
     {
         if(p2Amount < 1)
         {
+            WriteLine("---------------------------------------------");
+
             WriteLine("Get one Beyond prestige first to enter these!");
+
+            WriteLine("---------------------------------------------");
             return;
         }
         
@@ -216,7 +220,11 @@ class Chall
 
         if(p2Amount < 1)
         {
+            WriteLine("-------------------------------------------");
+
             WriteLine("Get one Beyond prestige first to see these!");
+
+            WriteLine("-------------------------------------------");
             return;
         }
 

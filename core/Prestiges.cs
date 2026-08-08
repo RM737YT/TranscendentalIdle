@@ -10,6 +10,7 @@ class Pre
     public static BigDouble productionP1 = 0, productionP2 = 0, productionP2Amount = 1;
     public static BigDouble multP1 = 1, bestP1 = 0;
     public static BigDouble pointsP2 = 0, p2Amount = 0;
+    public static BigDouble multP1Gain;
 
     public static void prestigeP1Gain()
     {
@@ -47,13 +48,13 @@ class Pre
     public static BigDouble nextP1Gain()
     {
         BigDouble currentGain = productionP1;
-        BigDouble gain = currentGain - bestP1;
-        if (gain < 0)
+        multP1Gain = currentGain - bestP1;
+        if (multP1Gain < 0)
         {
-            gain = 0;;
+            multP1Gain = 0;;
         }
         
-        return gain;
+        return multP1Gain;
     }
 
     public static void prestigeP2Gain()

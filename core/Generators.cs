@@ -220,14 +220,13 @@ public class Gen
 
     public static void buyerMax()
     {
-        if(multP1 < 1)
+        if(multP1 < 2)
         {
-            WriteLine("Not unlocked yet! \nUnlocks at the first Multiplier prestige!");
-            return;
-        }
-        else if(p2Amount < 1)
-        {
-            WriteLine("Not unlocked yet! \nUnlocks at the first Multiplier prestige!");
+            WriteLine("---------------------------------");
+
+            WriteLine("Not unlocked yet! \nUnlocks at two Multiplier points!");
+            
+            WriteLine("---------------------------------");
             return;
         }
 
